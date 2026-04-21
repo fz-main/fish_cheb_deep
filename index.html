@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Fishan | Рыболовные снасти в Чехии</title>
+    <!-- Font Awesome 6 (бесплатные иконки) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: простые и чистые шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f9fe;  /* лёгкая водная свежесть */
+            color: #1a2c3e;
+            line-height: 1.4;
+        }
+
+        /* контейнер */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* header */
+        .header {
+            background: #0b3b3f;
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+            font-weight: 700;
+        }
+        .logo p {
+            font-size: 0.8rem;
+            opacity: 0.85;
+            margin-top: 5px;
+        }
+        .header-info {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.12);
+            padding: 8px 15px;
+            border-radius: 40px;
+        }
+        .header-info i {
+            margin-right: 6px;
+        }
+        .cart-icon-mobile {
+            display: none;
+            background: #e67e22;
+            padding: 8px 14px;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+        /* навигация */
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            margin-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 12px;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover {
+            color: #f7b05e;
+        }
+
+        /* главная сетка: товары + корзина */
+        .main-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
+            margin: 40px 0;
+        }
+        .catalog {
+            flex: 2.5;
+            min-width: 260px;
+        }
+        .cart-sidebar {
+            flex: 1.2;
+            min-width: 280px;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.05);
+            padding: 24px 20px;
+            height: fit-content;
+            position: sticky;
+            top: 130px;
+        }
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border-left: 5px solid #e67e22;
+            padding-left: 18px;
+            color: #1e4a4f;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 24px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            transition: 0.25s ease;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.03);
+            border: 1px solid #e2edf2;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 30px rgba(0,0,0,0.08);
+        }
+        .product-img {
+            background: #eef3f7;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.8rem;
+            color: #2c7a6e;
+        }
+        .product-info {
+            padding: 16px 18px 20px;
+        }
+        .product-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+        }
+        .product-category {
+            font-size: 0.75rem;
+            color: #e67e22;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .product-price {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #1e4a4f;
+            margin: 10px 0;
+        }
+        .product-price small {
+            font-size: 0.75rem;
+            font-weight: normal;
+        }
+        .btn-add {
+            background: #0b3b3f;
+            border: none;
+            color: white;
+            padding: 10px 0;
+            width: 100%;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-add:hover {
+            background: #e67e22;
+        }
+
+        /* корзина */
+        .cart-items {
+            max-height: 380px;
+            overflow-y: auto;
+            margin: 20px 0;
+            border-top: 1px solid #e2edf2;
+            border-bottom: 1px solid #e2edf2;
+            padding: 12px 0;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e0ecef;
+        }
+        .cart-item-info {
+            flex: 2;
+        }
+        .cart-item-title {
+            font-weight: 600;
+        }
+        .cart-item-price {
+            font-size: 0.75rem;
+            color: #2c7a6e;
+        }
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0f5f7;
+            padding: 4px 8px;
+            border-radius: 30px;
+        }
+        .cart-item-qty button {
+            background: none;
+            border: none;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 24px;
+            color: #1e4a4f;
+        }
+        .cart-item-qty span {
+            min-width: 20px;
+            text-align: center;
+        }
+        .remove-item {
+            background: none;
+            border: none;
+            color: #b91c1c;
+            cursor: pointer;
+            margin-left: 8px;
+            font-size: 1rem;
+        }
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin: 15px 0;
+        }
+        .empty-cart {
+            text-align: center;
+            color: #6c8b92;
+            padding: 20px 0;
+        }
+        /* форма заказа */
+        .order-form {
+            margin-top: 24px;
+        }
+        .order-form h3 {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 28px;
+            border: 1px solid #cbdde2;
+            font-family: inherit;
+            background: #fff;
+            outline: none;
+            transition: 0.2s;
+        }
+        .form-group input:focus {
+            border-color: #e67e22;
+        }
+        .payment-methods {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 24px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .payment-methods label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .btn-checkout {
+            background: #e67e22;
+            width: 100%;
+            border: none;
+            padding: 14px;
+            border-radius: 40px;
+            font-weight: 700;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-checkout:hover {
+            background: #cf711f;
+        }
+
+        /* секции: отзывы, услуги, график */
+        .info-sections {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 50px 0 40px;
+        }
+        .info-card {
+            background: white;
+            border-radius: 28px;
+            padding: 24px;
+            flex: 1 1 280px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid #dee9ed;
+        }
+        .info-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1e4a4f;
+        }
+        .hours-list {
+            list-style: none;
+        }
+        .hours-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eef2f4;
+        }
+        .review-item {
+            margin-bottom: 20px;
+            border-left: 3px solid #e67e22;
+            padding-left: 16px;
+        }
+        .review-name {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .service-badge {
+            background: #eef3f7;
+            border-radius: 40px;
+            padding: 6px 12px;
+            display: inline-block;
+            margin: 5px 6px 0 0;
+            font-size: 0.8rem;
+        }
+        footer {
+            background: #0b3b3f;
+            color: #cbdde2;
+            padding: 28px 0;
+            text-align: center;
+            margin-top: 30px;
+        }
+        @media (max-width: 880px) {
+            .cart-sidebar {
+                position: static;
+                order: 2;
+            }
+            .catalog {
+                order: 1;
+            }
+            .header-info {
+                font-size: 0.8rem;
+            }
+        }
+        @media (max-width: 620px) {
+            .products-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        button {
+            cursor: pointer;
+        }
+        .toast-msg {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #1e4a4f;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 40px;
+            z-index: 999;
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: 0.2s;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <div class="header-inner">
+            <div class="logo">
+                <h1>🐟 FISHAN <span style="font-weight: 400;">G SHOP</span></h1>
+                <p>Rybářské potřeby Navrátilová • Cheb</p>
+            </div>
+            <div class="header-info">
+                <span><i class="fas fa-phone-alt"></i> +420 607 790 211</span>
+                <span><i class="fas fa-map-marker-alt"></i> Komenského 14, 350 02 Cheb</span>
+            </div>
+            <div class="cart-icon-mobile" id="mobileCartBtn">
+                <i class="fas fa-shopping-cart"></i> Корзина
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#catalog">Снасти</a>
+            <a href="#reviews">Отзывы</a>
+            <a href="#info">Контакты</a>
+        </div>
+    </div>
+</div>
+
+<main class="container main-grid">
+    <!-- КАТАЛОГ ТОВАРОВ -->
+    <div class="catalog" id="catalog">
+        <div class="section-title">🎣 Наш ассортимент (пример)</div>
+        <div class="products-grid" id="productsContainer"></div>
+        <p style="margin-top: 20px; font-size: 0.8rem; color: #5f8b94;"><i class="fas fa-info-circle"></i> Точные списки и фотографии добавим по вашему запросу — свяжитесь с нами!</p>
+    </div>
+
+    <!-- КОРЗИНА + ЗАКАЗ -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <h3><i class="fas fa-shopping-basket"></i> Ваша корзина</h3>
+        <div id="cartItemsList" class="cart-items">
+            <div class="empty-cart">Корзина пуста. Добавьте товары!</div>
+        </div>
+        <div id="cartTotal" class="cart-total">Итого: 0 Kč</div>
+        
+        <div class="order-form">
+            <h3>📋 Оформление заказа</h3>
+            <div class="form-group">
+                <input type="text" id="customerName" placeholder="Ваше имя *" autocomplete="name">
+            </div>
+            <div class="form-group">
+                <input type="tel" id="customerPhone" placeholder="Телефон *" autocomplete="tel">
+            </div>
+            <div class="form-group">
+                <input type="email" id="customerEmail" placeholder="Email (для уведомлений)">
+            </div>
+            <div class="form-group">
+                <textarea rows="2" id="customerAddress" placeholder="Адрес доставки (город, улица, дом)"></textarea>
+            </div>
+            <div class="payment-methods">
+                <label><i class="fas fa-credit-card"></i> <input type="radio" name="payment" value="card" checked> Оплата картой онлайн (тестовый режим)</label>
+                <label><i class="fas fa-money-bill-wave"></i> <input type="radio" name="payment" value="cod"> Наличные / карта при получении</label>
+                <p style="font-size: 0.7rem; margin-top: 8px;">🔐 Бесконтактная оплата (NFC) в магазине, доставка по Чехии</p>
+            </div>
+            <button class="btn-checkout" id="checkoutBtn">💳 Заказать и оплатить</button>
+        </div>
+        <div style="margin-top: 16px; font-size: 0.7rem; text-align: center; color:#5f8b94;">
+            <i class="fas fa-truck"></i> Быстрая доставка • Гарантия качества
+        </div>
+    </div>
+</main>
+
+<!-- Блок информации: услуги, отзывы, график -->
+<div class="container info-sections" id="info">
+    <div class="info-card">
+        <h3><i class="far fa-clock"></i> Часы работы</h3>
+        <ul class="hours-list">
+            <li><span>Понедельник</span><span>09:00–12:00, 13:00–17:00</span></li>
+            <li><span>Вторник</span><span>09:00–12:00, 13:00–17:00</span></li>
+            <li><span>Среда</span><span>09:00–12:00, 13:00–17:00</span></li>
+            <li><span>Четверг</span><span>09:00–12:00, 13:00–17:00</span></li>
+            <li><span>Пятница</span><span>09:00–12:00, 13:00–17:00</span></li>
+            <li><span>Суббота</span><span>09:00–12:00</span></li>
+            <li><span>Воскресенье</span><span>Закрыто</span></li>
+        </ul>
+    </div>
+    <div class="info-card">
+        <h3><i class="fas fa-star"></i> Отзывы покупателей</h3>
+        <div class="review-item">
+            <div class="review-name">⭐ A. Shurukin</div>
+            <p>Отличный магазин с большим выбором. Персонал проконсультирует, но у меня был инцидент с заказом блесен и воблеров — не приехали вовремя. Деньги не взяли. В целом магазин классный, советую!</p>
+        </div>
+        <div class="review-item">
+            <div class="review-name">⭐ Petr Sura</div>
+            <p>Как постоянный покупатель ставлю высший балл. Всегда помогут, закажут что угодно. Чувствую себя как рыба в воде. Рекомендую!</p>
+        </div>
+        <div class="review-item">
+            <div class="review-name">⭐ Jiri Vrsan</div>
+            <p>Заказал блесны и воблеры, но пока ехал — воблеры продали. Деньги не взяли. Магазин очень классный, всем советую! Ассортимент топ.</p>
+        </div>
+    </div>
+    <div class="info-card">
+        <h3><i class="fas fa-concierge-bell"></i> Услуги и оплата</h3>
+        <div>
+            <span class="service-badge"><i class="fas fa-truck"></i> Доставка</span>
+            <span class="service-badge"><i class="fas fa-bolt"></i> Быстрое обслуживание</span>
+            <span class="service-badge"><i class="fas fa-wifi"></i> Бесконтактная оплата (NFC)</span>
+            <span class="service-badge"><i class="fas fa-credit-card"></i> Дебетовые карты</span>
+            <span class="service-badge"><i class="fas fa-credit-card"></i> Кредитные карты</span>
+        </div>
+        <p style="margin-top: 18px;"><i class="fas fa-store"></i> <strong>Fishan - Rybářské potřeby</strong><br>Komenského 14, Cheb<br>📞 607790211<br>✉️ info@fishan.cz (предварительные заказы)</p>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <p>🐟 FISHAN G SHOP — рыболовные снасти с душой.  В реальном магазине вы найдёте всё: от блесен до современных эхолотов. Заказы по телефону и онлайн.</p>
+        <p style="margin-top: 12px;">© 2025 Fishan | Ваш надёжный партнёр на воде</p>
+    </div>
+</footer>
+
+<div id="toastMsg" class="toast-msg"></div>
+
+<script>
+    // -------- ТОВАРЫ (примерный ассортимент, позже клиент заменит списки и фото) --------
+    const products = [
+        { id: 1, name: "Блесна Vibrax Silver", category: "Блесны", price: 189, icon: "🎣", desc: "Колеблющаяся блесна" },
+        { id: 2, name: "Воблер Minnow 9cm", category: "Воблеры", price: 329, icon: "🐟", desc: "Плавающий, заглубление 1.5м" },
+        { id: 3, name: "Набор блесен (5шт)", category: "Блесны", price: 690, icon: "✨", desc: "Разные размеры" },
+        { id: 4, name: "Силиконовая приманка", category: "Приманки", price: 99, icon: "🦑", desc: "Твистер 10см" },
+        { id: 5, name: "Плетёный шнур 150м", category: "Снасти", price: 449, icon: "🧵", desc: "0.16мм, прочность" },
+        { id: 6, name: "Воблер Jerk Bait", category: "Воблеры", price: 499, icon: "🐠", desc: "Для щуки" },
+        { id: 7, name: "Катушка безынерционная", category: "Снасти", price: 1290, icon: "⚙️", desc: "Размер 3000" },
+        { id: 8, name: "Флюорокарбон 0.28", category: "Снасти", price: 279, icon: "🎯", desc: "30 метров" }
+    ];
+
+    // Корзина: { id, name, price, quantity }
+    let cart = [];
+
+    // Функция сохранения и рендера
+    function saveCart() {
+        localStorage.setItem('fishan_cart', JSON.stringify(cart));
+        renderCart();
+    }
+
+    function loadCart() {
+        const saved = localStorage.getItem('fishan_cart');
+        if(saved) {
+            try{
+                cart = JSON.parse(saved);
+            }catch(e){ cart = []; }
+        } else {
+            cart = [];
+        }
+        renderCart();
+    }
+
+    function addToCart(product) {
+        const existing = cart.find(item => item.id === product.id);
+        if(existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({ id: product.id, name: product.name, price: product.price, quantity: 1 });
+        }
+        saveCart();
+        showToast(`✅ ${product.name} добавлен в корзину`);
+    }
+
+    function updateQuantity(id, delta) {
+        const idx = cart.findIndex(item => item.id === id);
+        if(idx !== -1) {
+            const newQty = cart[idx].quantity + delta;
+            if(newQty <= 0) {
+                cart.splice(idx,1);
+            } else {
+                cart[idx].quantity = newQty;
+            }
+            saveCart();
+        }
+    }
+
+    function removeItem(id) {
+        cart = cart.filter(item => item.id !== id);
+        saveCart();
+        showToast("Товар удалён");
+    }
+
+    function renderCart() {
+        const cartContainer = document.getElementById('cartItemsList');
+        const totalContainer = document.getElementById('cartTotal');
+        if(!cartContainer) return;
+        if(cart.length === 0) {
+            cartContainer.innerHTML = '<div class="empty-cart">🛒 Корзина пуста. Добавьте снасти!</div>';
+            totalContainer.innerText = `Итого: 0 Kč`;
+            return;
+        }
+        let html = '';
+        let total = 0;
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            html += `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">${escapeHtml(item.name)}</div>
+                        <div class="cart-item-price">${item.price} Kč / шт</div>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <div class="cart-item-qty">
+                            <button class="qty-dec" data-id="${item.id}">−</button>
+                            <span>${item.quantity}</span>
+                            <button class="qty-inc" data-id="${item.id}">+</button>
+                        </div>
+                        <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+        cartContainer.innerHTML = html;
+        totalContainer.innerText = `Итого: ${total} Kč`;
+
+        // обработчики для кнопок корзины
+        document.querySelectorAll('.qty-dec').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.dataset.id);
+                updateQuantity(id, -1);
+            });
+        });
+        document.querySelectorAll('.qty-inc').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.dataset.id);
+                updateQuantity(id, 1);
+            });
+        });
+        document.querySelectorAll('.remove-item').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.dataset.id);
+                removeItem(id);
+            });
+        });
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toastMsg');
+        toast.innerText = msg;
+        toast.style.opacity = '1';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+        }, 2400);
+    }
+
+    // Рендер каталога товаров
+    function renderProducts() {
+        const container = document.getElementById('productsContainer');
+        if(!container) return;
+        let html = '';
+        products.forEach(prod => {
+            html += `
+                <div class="product-card">
+                    <div class="product-img">
+                        ${prod.icon} 
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">${escapeHtml(prod.name)}</div>
+                        <div class="product-category">${escapeHtml(prod.category)}</div>
+                        <div class="product-price">${prod.price} <small>Kč</small></div>
+                        <button class="btn-add" data-id="${prod.id}"><i class="fas fa-cart-plus"></i> В корзину</button>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+        document.querySelectorAll('.btn-add').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = parseInt(btn.dataset.id);
+                const product = products.find(p => p.id === id);
+                if(product) addToCart(product);
+            });
+        });
+    }
+
+    // ОФОРМЛЕНИЕ ЗАКАЗА + ОПЛАТА (тестовый режим)
+    function checkout() {
+        if(cart.length === 0) {
+            showToast("Корзина пуста! Добавьте товары для заказа.");
+            return;
+        }
+        const name = document.getElementById('customerName')?.value.trim();
+        const phone = document.getElementById('customerPhone')?.value.trim();
+        const address = document.getElementById('customerAddress')?.value.trim();
+        if(!name || !phone) {
+            showToast("Пожалуйста, укажите имя и телефон для оформления заказа.");
+            return;
+        }
+        const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value;
+        let totalPrice = 0;
+        cart.forEach(item => totalPrice += item.price * item.quantity);
+        
+        // Формируем данные заказа
+        const orderData = {
+            customer: name,
+            phone: phone,
+            email: document.getElementById('customerEmail')?.value.trim() || 'не указан',
+            address: address || 'Самовывоз (Cheb)',
+            payment: paymentMethod === 'card' ? 'Карта онлайн (тест)' : 'Наложенный платеж/при получении',
+            items: cart.map(i => ({ name: i.name, qty: i.quantity, price: i.price })),
+            total: totalPrice,
+            date: new Date().toLocaleString()
+        };
+        
+        // Симуляция оплаты: если выбран "онлайн карта" - показываем модальное окно с тестовой оплатой
+        if(paymentMethod === 'card') {
+            // Имитация платёжного шлюза
+            const confirmPay = confirm(`💳 ТЕСТОВАЯ ОПЛАТА\nСумма: ${totalPrice} Kč\nСпособ: карта онлайн (демо)\nНажмите "ОК" для симуляции успешной оплаты.\n\nВ реальном проекте будет подключена платёжная система.`);
+            if(confirmPay) {
+                // успешная оплата
+                finalizeOrder(orderData, true);
+            } else {
+                showToast("Оплата отменена. Заказ не оформлен.");
+            }
+        } else {
+            // наличные / при получении - просто оформляем заказ без онлайн оплаты
+            finalizeOrder(orderData, false);
+        }
+    }
+    
+    function finalizeOrder(orderData, paidOnline) {
+        // Сохраняем заказ (можно отправить на сервер, здесь симуляция)
+        console.log("ЗАКАЗ ОФОРМЛЕН:", orderData);
+        let msg = `🎣 Заказ #${Math.floor(Math.random()*10000)} принят!\n`;
+        msg += `Сумма: ${orderData.total} Kč\n`;
+        if(paidOnline) {
+            msg += `Оплата онлайн (тест) прошла успешно! 🎉\n`;
+        } else {
+            msg += `Способ оплаты: ${orderData.payment}. Ожидайте звонка для подтверждения.\n`;
+        }
+        msg += `Мы свяжемся с вами в ближайшее время. Спасибо за покупку в Fishan!`;
+        alert(msg);
+        showToast("Заказ оформлен! Корзина очищена.");
+        // Очищаем корзину
+        cart = [];
+        saveCart();
+        // Не очищаем поля формы, чтобы можно было повторить, но можно опционально
+        // Очистим корзину и перерендерим
+        renderCart();
+        // дополнительно: очистим форму по желанию
+        document.getElementById('customerName').value = '';
+        document.getElementById('customerPhone').value = '';
+        document.getElementById('customerEmail').value = '';
+        document.getElementById('customerAddress').value = '';
+    }
+    
+    // Мобильное сворачивание - прокрутка к корзине
+    const mobileBtn = document.getElementById('mobileCartBtn');
+    if(mobileBtn) {
+        mobileBtn.addEventListener('click', () => {
+            const cartElem = document.getElementById('cartSidebar');
+            cartElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', () => {
+        renderProducts();
+        loadCart();
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        if(checkoutBtn) checkoutBtn.addEventListener('click', checkout);
+    });
+</script>
+</body>
+</html>
